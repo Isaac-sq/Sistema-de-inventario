@@ -84,7 +84,7 @@
           </div>
           <div class="col-12 text-end">
             <button type="button" class="btn btn-success me-2" onclick="agregarProducto()">Agregar</button>
-            <button type="reset" class="btn btn-warning" onclick="document.getElementById('campoStock').style.display='none';    limpiarErroresCampos();">Limpiar</button>
+            <button type="reset" class="btn btn-warning" onclick="document.getElementById('campoStock').style.display='none'; document.getElementById('idProducto').disabled = false;   limpiarErroresCampos();">Limpiar</button>
           </div>
         </form>
       </div>
@@ -173,7 +173,7 @@ const rol = localStorage.getItem("rol");
 const bienvenida = document.getElementById("bienvenida");
 
 if (rol !== "admin") {
-  window.location.href = "/paginas/login.html";
+  window.location.href = "/index.html";
 } else {
   bienvenida.textContent = `Bienvenido, Administrador`;
 }
@@ -362,7 +362,7 @@ function venderProducto() {
 
 function cerrarSesion() {
   localStorage.removeItem("rol");
-  window.location.href = "/paginas/login.html";
+  window.location.href = "/index.html";
 }
 
 mostrarInventario();

@@ -78,7 +78,7 @@
     const bienvenida = document.getElementById("bienvenida");
 
     if (!rol || (rol !== "bodeguero" && rol !== "admin")) {
-      window.location.href = "/paginas/login.html";
+      window.location.href = "/index.html";
     } else {
       const rolMostrar = rol === "bodeguero" ? "Bodeguero" : "Administrador";
       bienvenida.textContent = `Bienvenido, ${rolMostrar}`;
@@ -136,7 +136,7 @@
 
     function cerrarSesion() {
       localStorage.removeItem("rol");
-      window.location.href = "/paginas/login.html";
+      window.location.href = "/index.html";
     }
 
     actualizarSelectCompra();
