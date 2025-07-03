@@ -173,7 +173,7 @@ const rol = localStorage.getItem("rol");
 const bienvenida = document.getElementById("bienvenida");
 
 if (rol !== "admin") {
-  window.location.href = "/index.html";
+  window.location.href = "index.html";
 } else {
   bienvenida.textContent = `Bienvenido, Administrador`;
 }
@@ -362,7 +362,7 @@ function venderProducto() {
 
 function cerrarSesion() {
   localStorage.removeItem("rol");
-  window.location.href = "/index.html";
+  window.location.href = "index.html";
 }
 
 mostrarInventario();

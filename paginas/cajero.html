@@ -36,13 +36,13 @@
 
   <ul class="nav nav-tabs mt-4 container">
     <li class="nav-item" id="tab-gestion" style="display: none;">
-      <a class="nav-link" href="/paginas/admin.html">Gestión de Productos</a>
+      <a class="nav-link" href="paginas/admin.html">Gestión de Productos</a>
     </li>
     <li class="nav-item" id="tab-venta" style="display: none;">
-      <a class="nav-link active" href="/paginas/cajero.html">Proceso de Venta</a>
+      <a class="nav-link active" href="paginas/cajero.html">Proceso de Venta</a>
     </li>
     <li class="nav-item" id="tab-compra" style="display: none;">
-      <a class="nav-link" href="/paginas/bodeguero.html">Proceso de Compra</a>
+      <a class="nav-link" href="paginas/bodeguero.html">Proceso de Compra</a>
     </li>
   </ul>
 
@@ -78,7 +78,7 @@
     const bienvenida = document.getElementById("bienvenida");
 
     if (!rol || (rol !== "cajero" && rol !== "admin")) {
-      window.location.href = "/index.html";
+      window.location.href = "index.html";
     } else {
       const rolMostrar = (rol === "cajero") ? "Cajero" : "Administrador";
       bienvenida.textContent = `Bienvenido, ${rolMostrar}`;
@@ -140,7 +140,7 @@
 
     function cerrarSesion() {
       localStorage.removeItem("rol");
-      window.location.href = "/index.html";
+      window.location.href = "index.html";
     }
 
     actualizarSelectVenta();
