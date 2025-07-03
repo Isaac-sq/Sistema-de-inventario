@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Administrador - Sistema de Inventario</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      background: #dff1ff;
+    }
+    .nav-link.active {
+      font-weight: bold;
+      border-bottom: 2px solid #0d6efd;
+    }
+    .nav-tabs .nav-link {
+      transition: background-color 0.3s ease, color 0.3s ease;
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+    .nav-tabs .nav-link:hover {
+      background-color: #ffffff;
+      color: #0d6efd;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+  <a class="navbar-brand" href="#">Sistema de Inventario</a>
+  <div class="ms-auto d-flex align-items-center">
+    <span id="bienvenida" class="text-white me-3 fw-semibold"></span>
+    <button class="btn btn-outline-danger" onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+</nav>
+
+<ul class="nav nav-tabs mt-4 container">
+  <li class="nav-item">
+    <a class="nav-link active" data-bs-toggle="tab" href="#gestion">Gestión de Productos</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#compra">Proceso de Compra</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#venta">Proceso de Venta</a>
+  </li>
+</ul>
+
+<div class="tab-content container mt-4">
+
+  
+  <div class="tab-pane fade show active" id="gestion">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Agregar / Actualizar Producto</h5>
+        <div id="alertaGestion"></div>
+        <form id="formProducto" class="row g-3">
+          <div class="col-md-2">
+            <label for="idProducto" class="form-label">ID *</label>
+            <input type="number" id="idProducto" class="form-control">
+          </div>
+          <div class="col-md-2">
+            <label for="nombreProducto" class="form-label">Nombre *</label>
+            <input type="text" id="nombreProducto" class="form-control">
+            <div class="invalid-feedback">No se permiten números en este campo.</div>
+          </div>
+          <div class="col-md-2">
+            <label for="descripcionProducto" class="form-label">Descripción</label>
+            <input type="text" id="descripcionProducto" class="form-control">
+            <div class="invalid-feedback">No se permiten números en este campo.</div>
+          </div>
+          <div class="col-md-2">
+            <label for="categoriaProducto" class="form-label">Categoría</label>
+            <input type="text" id="categoriaProducto" class="form-control">
+            <div class="invalid-feedback">No se permiten números en este campo.</div>
+          </div>
+          <div class="col-md-2">
+            <label for="valorProducto" class="form-label">Precio *</label>
+            <input type="number" id="valorProducto" class="form-control">
+          </div>
+          <div class="col-md-2" id="campoStock" style="display:none;">
+            <label for="stockProducto" class="form-label">Stock *</label>
+            <input type="number" id="stockProducto" class="form-control">
+          </div>
+          <div class="col-12 text-end">
+            <button type="button" class="btn btn-success me-2" onclick="agregarProducto()">Agregar</button>
+            <button type="reset" class="btn btn-warning" onclick="document.getElementById('campoStock').style.display='none';    limpiarErroresCampos();">Limpiar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Lista de Productos</h5>
+        <div class="table-responsive">
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Stock</th>
+                <th>Valor</th>
+                <th>Descripción</th>
+                <th class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaProductos"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="tab-pane fade" id="compra">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title mb-3">Realizar Compra</h5>
+        <div id="alertaCompra"></div>
+        <form class="row g-3 align-items-center">
+          <div class="col-md-6">
+            <label for="selectCompra" class="form-label">Producto *</label>
+            <select id="selectCompra" class="form-select"></select>
+          </div>
+          <div class="col-md-4">
+            <label for="cantidadCompra" class="form-label">Cantidad a comprar *</label>
+            <input type="number" id="cantidadCompra" class="form-control">
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button type="button" class="btn btn-primary w-100 mt-4" onclick="comprarProducto()">Comprar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="tab-pane fade" id="venta">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title mb-3">Realizar Venta</h5>
+        <div id="alertaVenta"></div>
+        <form class="row g-3 align-items-center">
+          <div class="col-md-6">
+            <label for="selectVenta" class="form-label">Producto *</label>
+            <select id="selectVenta" class="form-select"></select>
+          </div>
+          <div class="col-md-4">
+            <label for="cantidadVenta" class="form-label">Cantidad a vender *</label>
+            <input type="number" id="cantidadVenta" class="form-control">
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button type="button" class="btn btn-success w-100 mt-4" onclick="venderProducto()">Vender</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Limpiar errores de campos
+function limpiarErroresCampos() {
+  ["nombreProducto", "categoriaProducto", "descripcionProducto"].forEach(id => {
+    document.getElementById(id).classList.remove("is-invalid");
+  });
+}
+
+const rol = localStorage.getItem("rol");
+const bienvenida = document.getElementById("bienvenida");
+
+if (rol !== "admin") {
+  window.location.href = "/paginas/login.html";
+} else {
+  bienvenida.textContent = `Bienvenido, Administrador`;
+}
+
+let inventario = JSON.parse(localStorage.getItem("inventario")) || [];
+
+function saveInventario(data) {
+  localStorage.setItem("inventario", JSON.stringify(data));
+}
+
+function mostrarMensaje(divId, tipo, texto) {
+  const div = document.getElementById(divId);
+  div.innerHTML = `<div class="alert alert-${tipo}">${texto}</div>`;
+  setTimeout(() => { div.innerHTML = ""; }, 3000);
+}
+
+function mostrarInventario() {
+  const tbody = document.getElementById("tablaProductos");
+  tbody.innerHTML = "";
+  inventario.forEach((prod, i) => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${prod.id}</td>
+        <td>${prod.nombre}</td>
+        <td>${prod.categoria}</td>
+        <td>${prod.stock}</td>
+        <td>$${prod.valor.toFixed(2)}</td>
+        <td>${prod.descripcion}</td>
+        <td class="text-center">
+          <button class="btn btn-warning btn-sm me-2" onclick="cargarProducto(${i})">Actualizar</button>
+          <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${i})">Eliminar</button>
+        </td>
+      </tr>`;
+  });
+  actualizarSelects();
+}
+
+function agregarProducto() {
+  limpiarErroresCampos();
+  const id = document.getElementById("idProducto").value.trim();
+  const nombre = document.getElementById("nombreProducto").value.trim();
+  const categoria = document.getElementById("categoriaProducto").value.trim();
+  const descripcion = document.getElementById("descripcionProducto").value.trim();
+  const valorInput = document.getElementById("valorProducto").value.trim();
+  const stockInput = document.getElementById("stockProducto").value.trim();
+
+  const valor = parseFloat(valorInput);
+  const stock = stockInput === "" ? 0 : parseInt(stockInput);
+
+  if (!id || !nombre || !valorInput) {
+    mostrarMensaje("alertaGestion", "danger", "Complete todos los campos obligatorios.");
+    return;
+  }
+
+  // Validar que nombre, categoría y descripción no contengan números
+  const regexSinNumeros = /^[^0-9]*$/;
+  let errorEnCampo = false;
+
+  if (!regexSinNumeros.test(nombre)) {
+    document.getElementById("nombreProducto").classList.add("is-invalid");
+    mostrarMensaje("alertaGestion", "danger", "El nombre no puede contener números.");
+    errorEnCampo = true;
+  }
+  if (!regexSinNumeros.test(categoria)) {
+    document.getElementById("categoriaProducto").classList.add("is-invalid");
+    mostrarMensaje("alertaGestion", "danger", "La categoría no puede contener números.");
+    errorEnCampo = true;
+  }
+  if (!regexSinNumeros.test(descripcion)) {
+    document.getElementById("descripcionProducto").classList.add("is-invalid");
+    mostrarMensaje("alertaGestion", "danger", "La descripción no puede contener números.");
+    errorEnCampo = true;
+  }
+
+  if (errorEnCampo) return;
+
+  if (valor <= 0) {
+    mostrarMensaje("alertaGestion", "danger", "El precio debe ser mayor a cero.");
+    return;
+  }
+
+  if (stock < 0) {
+    mostrarMensaje("alertaGestion", "danger", "El stock no puede ser negativo.");
+    return;
+  }
+
+  const index = inventario.findIndex(p => p.id == id);
+  
+
+  if (document.getElementById("campoStock").style.display === "block" ) {
+    if (index >= 0) {
+      inventario[index] = {id,nombre, categoria, stock, valor, descripcion };
+      mostrarMensaje("alertaGestion", "success", "Producto actualizado correctamente.");
+    } else {
+      mostrarMensaje("alertaGestion", "danger", "No se encontró un producto con este ID para actualizar.");
+      return;
+    }
+  } else {
+    if (index >= 0) {
+      mostrarMensaje("alertaGestion", "danger", "El ID ya está registrado, usa 'Actualizar' para modificarlo.");
+      return;
+    } else {
+      inventario.push({ id, nombre, categoria, stock, valor, descripcion });
+      mostrarMensaje("alertaGestion", "success", "Producto agregado correctamente.");
+    }
+  }
+
+  saveInventario(inventario);
+  mostrarInventario();
+  document.getElementById("formProducto").reset();
+  document.getElementById("campoStock").style.display = "none";
+  document.getElementById("idProducto").disabled = false;
+  
+}
+
+function cargarProducto(i) {
+  const p = inventario[i];
+  document.getElementById("idProducto").value = p.id;
+  document.getElementById("nombreProducto").value = p.nombre;
+  document.getElementById("categoriaProducto").value = p.categoria;
+  document.getElementById("descripcionProducto").value = p.descripcion;
+  document.getElementById("valorProducto").value = p.valor;
+  document.getElementById("stockProducto").value = p.stock;
+  document.getElementById("campoStock").style.display = "block";
+
+  document.getElementById("idProducto").disabled = true 
+}
+
+function eliminarProducto(i) {
+  inventario.splice(i, 1);
+  saveInventario(inventario);
+  mostrarInventario();
+  mostrarMensaje("alertaGestion", "success", "Producto eliminado.");
+}
+
+function actualizarSelects() {
+  const selectCompra = document.getElementById("selectCompra");
+  const selectVenta = document.getElementById("selectVenta");
+  if (selectCompra) selectCompra.innerHTML = "";
+  if (selectVenta) selectVenta.innerHTML = "";
+
+  inventario.forEach(prod => {
+    const option = `<option value="${prod.id}">${prod.nombre} (Stock: ${prod.stock})</option>`;
+    if (selectCompra) selectCompra.innerHTML += option;
+    if (selectVenta) selectVenta.innerHTML += option;
+  });
+}
+
+function comprarProducto() {
+  const id = document.getElementById("selectCompra").value;
+  const cant = parseInt(document.getElementById("cantidadCompra").value.trim());
+  if (isNaN(cant) || cant <= 0) {
+    mostrarMensaje("alertaCompra", "danger", "Ingrese cantidad válida.");
+    return;
+  }
+  const index = inventario.findIndex(p => p.id == id);
+  if (index >= 0) {
+    inventario[index].stock += cant;
+    saveInventario(inventario);
+    mostrarInventario();
+    mostrarMensaje("alertaCompra", "success", "Compra realizada correctamente.");
+    document.getElementById("cantidadCompra").value = "";
+  }
+}
+
+function venderProducto() {
+  const id = document.getElementById("selectVenta").value;
+  const cant = parseInt(document.getElementById("cantidadVenta").value.trim());
+  if (isNaN(cant) || cant <= 0) {
+    mostrarMensaje("alertaVenta", "danger", "Ingrese cantidad válida.");
+    return;
+  }
+  const index = inventario.findIndex(p => p.id == id);
+  if (index >= 0) {
+    if (inventario[index].stock >= cant) {
+      inventario[index].stock -= cant;
+      saveInventario(inventario);
+      mostrarInventario();
+      mostrarMensaje("alertaVenta", "success", "Venta realizada correctamente.");
+      document.getElementById("cantidadVenta").value = "";
+    } else {
+      mostrarMensaje("alertaVenta", "danger", "Stock insuficiente.");
+    }
+  }
+}
+
+function cerrarSesion() {
+  localStorage.removeItem("rol");
+  window.location.href = "/paginas/login.html";
+}
+
+mostrarInventario();
+</script>
+
+</body>
+</html>
