@@ -73,19 +73,19 @@
       msg.textContent = "Por favor, espere...";
       setTimeout(() => {
         localStorage.setItem("rol", "admin");
-        window.location.href = "/paginas/admin.html";
+        window.location.href = "paginas/admin.html";
       }, 1000); // mil milisegundos (Esto par simular un tiempo de carga)
     } else if (usuario === "bodeguero" && password === "comp123") {
       msg.textContent = "Por favor, espere...";
       setTimeout(() => {
         localStorage.setItem("rol", "bodeguero");
-        window.location.href = "/paginas/bodeguero.html";
+        window.location.href = "paginas/bodeguero.html";
       }, 1000);
     } else if (usuario === "cajero" && password === "vend123") {
       msg.textContent = "Por favor, espere...";
       setTimeout(() => {
         localStorage.setItem("rol", "cajero");
-        window.location.href = "/paginas/cajero.html";
+        window.location.href = "paginas/cajero.html";
       }, 1000);
     } else {
       msg.textContent = "Usuario o contraseña incorrectos.";
